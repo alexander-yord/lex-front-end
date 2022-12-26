@@ -43,7 +43,7 @@
                 "username": document.getElementById("username").value,
                 "password": document.getElementById("password").value
             }
-            result = await get_post("http://" + HOSTNAME + "/login", data);
+            result = await get_post("http://" + HOSTNAME + ":5000/login", data);
             console.log(result)
             //hide the loading icon
 
