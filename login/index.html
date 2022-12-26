@@ -20,7 +20,7 @@
     </div>
     <br>
 
-    <form onsubmit="login()">
+    <form>
         <h2>Log In</h2>
         <label for="username">
             Username:
@@ -30,19 +30,20 @@
             Password:
         </label><br>
         <input type="password" id="password" name="password"> <br>
-        <button type="submit">Log In</button> <br>
+        <button id="submit" onclick="login()">Log In</button> <br>
         <a href="signup">Don't have an account? Sign Up</a>
     </form>
 
     <script src="../general/apiCall.js">
         async function login() {
             // show the loading icon 
-            console.log(HOST);
+            console.log(HOSTNAME);
             data = {
                 "username": document.getElementById("username").value,
                 "password": document.getElementById("password").value
             }
             result = await get_post("http://" + HOSTNAME + "/login", data);
+            console.log(result)
             //hide the loading icon
 
             if (result["successful"] == true) {
@@ -50,7 +51,7 @@
                 sessionStorage.setItem("first_name") = result["first_name"];
                 sessionStorage.setItem("last_name") = result["last_name"];
                 sessionStorage.setItem("username") = result["username"];
-                window.location.href("../index");
+                window.location.href("../index.html");
             }
             else {
                 console.log(result["error_no"]);
