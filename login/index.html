@@ -26,26 +26,28 @@
             Username:
         </label> <br>
         <input type="text" id="username" name="username"><br>
+        <em style="color: red; display: none;" id="invalid-username">Invalid username</em> <br>
         <label for="password">
             Password:
         </label><br>
         <input type="password" id="password" name="password"> <br>
+        <em style="color: red; display: none;" id="invalid-password">Wrong password</em> <br>
         <input type="button" id="login-form" value="Log In" onclick="login()"> <br>
         <a href="signup">Don't have an account? Sign Up</a>
     </form>
 
     <script>
         async function login() {
-            // show the loading icon 
-            console.log("At least the function is being called");
-            console.log(HOSTNAME);
+            // add show the loading icon 
+
             data = {
                 "username": document.getElementById("username").value,
                 "password": document.getElementById("password").value
             }
             result = await get_post("http://" + HOSTNAME + ":5000/login", data);
             console.log(result)
-            //hide the loading icon
+
+            // add hide the loading icon
 
             if (result["success"] == true) {
                 sessionStorage.setItem("account_id", result["account_id"]);
@@ -56,6 +58,17 @@
             }
             else {
                 console.log(result["error_no"]);
+                if (result["error_no"] == 1) {  // username does not exist
+                    document.getElementById("username").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("invalid-username").style.display = "block";
+                    document.getElementById("invalid-password").style.display = "none";
+                }
+                else if (result["error_no"] == 2) {  // username exists but the password is wrong
+                    document.getElementById("password").value = "";
+                    document.getElementById("invalid-username").style.display = "none";
+                    document.getElementById("invalid-password").style.display = "block";
+                }
             }
         }
     </script>
