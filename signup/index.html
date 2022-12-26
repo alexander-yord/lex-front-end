@@ -99,7 +99,7 @@
 
                 const result = await get_post("http://" + HOSTNAME + ":5000/signup", data);
 
-                if (result["success"] == True) {
+                if (result["success"] == true) {
                     sessionStorage.setItem("account_id", result["account_id"]);
                     sessionStorage.setItem("first_name", result["first_name"]);
                     sessionStorage.setItem("last_name", result["last_name"]);
