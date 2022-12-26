@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Log In</title>
+    <link rel="stylesheet" href="../general/theme.css">
+    <link rel="stylesheet" href="../general/headers.css">
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <meta name="theme-color" content="#76B947" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../general/apiCall.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="topnav" id="myHeader">
+            <a href="../index.html" style="float: left;padding:0px; height: 100%"><img src="../images/logo.png"
+                    style="height: 40px !important; margin: 0px; padding-top: 5px !important; padding-right: 0px; padding-bottom: 0px; padding-left: 0px;"></a>
+        </div>
+    </div>
+    <br>
+
+    <form method="POST">
+        <h2>Log In</h2>
+        <label for="username">
+            Username:
+        </label> <br>
+        <input type="text" id="username" name="username">
+        <em style="color: red; display: none;" id="invalid-username">Invalid username <br></em><br>
+        <label for="password">
+            Password:
+        </label><br>
+        <input type="password" id="password" name="password">
+        <em style="color: red; display: none;" id="invalid-password">Incorrect password <br></em><br>
+        <input type="button" id="login-form" value="Log In" onclick="login()"> <br>
+        <a href="signup">Don't have an account? Sign Up</a>
+    </form>
+
+    <script>
+        async function login() {
+            // add show the loading icon 
+
+            data = {
+                "username": document.getElementById("username").value,
+                "password": document.getElementById("password").value
+            }
+            result = await get_post("http://" + HOSTNAME + ":5000/login", data);
+            console.log(result)
+
+            // add hide the loading icon
+
+            if (result["success"] == true) {
+                sessionStorage.setItem("account_id", result["account_id"]);
+                sessionStorage.setItem("first_name", result["first_name"]);
+                sessionStorage.setItem("last_name", result["last_name"]);
+                sessionStorage.setItem("username", result["username"]);
+                window.location.href = "../index.html";
+            }
+            else {
+                console.log(result["error_no"]);
+                if (result["error_no"] == 1) {  // username does not exist
+                    document.getElementById("username").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("invalid-username").style.display = "block";
+                    document.getElementById("invalid-password").style.display = "none";
+                }
+                else if (result["error_no"] == 2) {  // username exists but the password is wrong
+                    document.getElementById("password").value = "";
+                    document.getElementById("invalid-username").style.display = "none";
+                    document.getElementById("invalid-password").style.display = "block";
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
