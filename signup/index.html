@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Log In</title>
+    <link rel="stylesheet" href="../general/theme.css">
+    <link rel="stylesheet" href="../general/headers.css">
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <meta name="theme-color" content="#76B947" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../general/apiCall.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="topnav" id="myHeader">
+            <a href="../index.html" style="float: left;padding:0px; height: 100%"><img src="../images/logo.png"
+                    style="height: 40px !important; margin: 0px; padding-top: 5px !important; padding-right: 0px; padding-bottom: 0px; padding-left: 0px;"></a>
+        </div>
+    </div> <br>
+
+    <form id="signUpForm" method="post" class="sign-up">
+        <h2>Sign Up</h2>
+        <label for="f_name">First Name:</label><br>
+        <input id="f_name" type="text" name="f_name" required maxlength="12"><br>
+        <label for="l_name">Last Name:</label><br>
+        <input id="l_name" type="text" name="l_name" required maxlength="12"><br>
+        <label for="username">Username:</label><br>
+        <input id="username" type="text" name="username" onkeyup="usernameValidate()" required minlength="4"
+            maxlength="16">
+        <br>
+        <label id="notUnique" style="color: red; display: none">
+            This username is taken! <br>
+        </label>
+        <label id="shortUsername" style="color: red; display: none">
+            Username must be at least 4 characters! <br>
+        </label>
+        <label for="password">Password:</label><br>
+        <input id="password" type="password" name="password" onkeyup="passwordMinLength()" required minlength="4"
+            maxlength="16"><br>
+        <label id="shortPassword" style="color: red; display: none">
+            Password must be at least 4 characters! <br>
+        </label>
+        <input type="button" id="signup-form" value="Sign Up" onclick="signup()"> <br>
+        <a href="../login">Already have an account? Log In</a>
+    </form>
+
+    <script>
+        async function usernameValidate() {
+            username = document.getElementById("username").value;
+            result = await get_post("http://" + HOST + ":5000/uniqueness", { "username": username });
+
+            if (result["unique"] == false) {
+                document.getElementById("notUnique").style.display = "block";
+            }
+            else {
+                document.getElementById("notUnique").style.display = "none";
+            }
+
+            if (username.length < 4) {
+                document.getElementById("shortUsername").style.display = "block";
+            }
+            else {
+                document.getElementById("shortUsername").style.display = "none";
+            }
+        }
+
+        function passwordMinLength() {
+            if (document.getElementById("password").value.length < 4) {
+                document.getElementById("shortPassword").style.display = "block";
+            }
+            else {
+                document.getElementById("shortPassword").style.display = "none";
+            }
+        }
+
+        async function signup() {
+            first_name = document.getElementById("f_name").value;
+            last_name = document.getElementById("l_name").value;
+            username = document.getElementById("username").value;
+            password = document.getElementById("password").value;
+
+            const unique = await get_post("http://" + HOST + ":5000/uniqueness", { "username": username });
+
+            if (result["unique"] == false) {
+                document.getElementById("notUnique").style.display = "block";
+            }
+            else {
+                document.getElementById("notUnique").style.display = "none";
+
+                data = {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "username": username,
+                    "password": password
+                }
+
+                const result = await get_post("http://" + HOST + ":5000/signup", data);
+
+                if (result["success"] == True) {
+                    sessionStorage.setItem("account_id", result["account_id"]);
+                    sessionStorage.setItem("first_name", result["first_name"]);
+                    sessionStorage.setItem("last_name", result["last_name"]);
+                    sessionStorage.setItem("username", result["username"]);
+                    window.location.href = "../index.html";
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
