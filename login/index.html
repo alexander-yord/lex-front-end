@@ -30,13 +30,15 @@
             Password:
         </label><br>
         <input type="password" id="password" name="password"> <br>
-        <button id="submit" onclick="login()">Log In</button> <br>
+        <button type="reset" id="login-form">Log In</button> <br>
         <a href="signup">Don't have an account? Sign Up</a>
     </form>
 
     <script src="../general/apiCall.js">
+        document.getElementById("login-form").addEventListener("click", login);
         async function login() {
             // show the loading icon 
+            console.log("At least the function is being called");
             console.log(HOSTNAME);
             data = {
                 "username": document.getElementById("username").value,
@@ -56,7 +58,6 @@
             else {
                 console.log(result["error_no"]);
             }
-
         }
     </script>
 
