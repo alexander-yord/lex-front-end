@@ -52,7 +52,7 @@
                 sessionStorage.setItem("first_name", result["first_name"]);
                 sessionStorage.setItem("last_name", result["last_name"]);
                 sessionStorage.setItem("username", result["username"]);
-                window.location.href("../index.html");
+                window.location.href = "../index.html";
             }
             else {
                 console.log(result["error_no"]);
