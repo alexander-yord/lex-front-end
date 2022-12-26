@@ -28,19 +28,18 @@
         <label for="username">Username:</label><br>
         <input id="username" type="text" name="username" onkeyup="usernameValidate()" required minlength="4"
             maxlength="16">
-        <br>
         <label id="notUnique" style="color: red; display: none">
             This username is taken! <br>
         </label>
         <label id="shortUsername" style="color: red; display: none">
             Username must be at least 4 characters! <br>
-        </label>
+        </label> <br>
         <label for="password">Password:</label><br>
         <input id="password" type="password" name="password" onkeyup="passwordMinLength()" required minlength="4"
-            maxlength="16"><br>
+            maxlength="16">
         <label id="shortPassword" style="color: red; display: none">
             Password must be at least 4 characters! <br>
-        </label>
+        </label><br>
         <input type="button" id="signup-form" value="Sign Up" onclick="signup()"> <br>
         <a href="../login">Already have an account? Log In</a>
     </form>
@@ -48,20 +47,22 @@
     <script>
         async function usernameValidate() {
             username = document.getElementById("username").value;
-            result = await get_post("http://" + HOST + ":5000/uniqueness", { "username": username });
+            result = await get_post("http://" + HOSTNAME + ":5000/uniqueness", { "username": username });
 
-            if (result["unique"] == false) {
-                document.getElementById("notUnique").style.display = "block";
-            }
-            else {
-                document.getElementById("notUnique").style.display = "none";
-            }
-
+            // checks for the min length
             if (username.length < 4) {
                 document.getElementById("shortUsername").style.display = "block";
             }
             else {
                 document.getElementById("shortUsername").style.display = "none";
+            }
+
+            // checks that username does not already exist
+            if (result["unique"] == false) {
+                document.getElementById("notUnique").style.display = "block";
+            }
+            else {
+                document.getElementById("notUnique").style.display = "none";
             }
         }
 
@@ -80,8 +81,9 @@
             username = document.getElementById("username").value;
             password = document.getElementById("password").value;
 
-            const unique = await get_post("http://" + HOST + ":5000/uniqueness", { "username": username });
+            const unique = await get_post("http://" + HOSTNAME + ":5000/uniqueness", { "username": username });
 
+            // checks that username does not already exist
             if (result["unique"] == false) {
                 document.getElementById("notUnique").style.display = "block";
             }
@@ -95,7 +97,7 @@
                     "password": password
                 }
 
-                const result = await get_post("http://" + HOST + ":5000/signup", data);
+                const result = await get_post("http://" + HOSTNAME + ":5000/signup", data);
 
                 if (result["success"] == True) {
                     sessionStorage.setItem("account_id", result["account_id"]);
