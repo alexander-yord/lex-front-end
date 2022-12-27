@@ -22,9 +22,9 @@
     <form id="signUpForm" method="post" class="sign-up">
         <h2>Sign Up</h2>
         <label for="f_name">First Name:</label><br>
-        <input id="f_name" type="text" name="f_name" required maxlength="12"><br>
+        <input id="f_name" type="text" name="f_name" required maxlength="35"><br>
         <label for="l_name">Last Name:</label><br>
-        <input id="l_name" type="text" name="l_name" required maxlength="12"><br>
+        <input id="l_name" type="text" name="l_name" required maxlength="35"><br>
         <label for="username">Username:</label><br>
         <input id="username" type="text" name="username" onkeyup="usernameValidate()" required minlength="4"
             maxlength="16">
@@ -99,12 +99,32 @@
 
                 const result = await get_post("http://" + HOSTNAME + ":5000/signup", data);
 
-                if (result["success"] == true) {
-                    sessionStorage.setItem("account_id", result["account_id"]);
-                    sessionStorage.setItem("first_name", result["first_name"]);
-                    sessionStorage.setItem("last_name", result["last_name"]);
-                    sessionStorage.setItem("username", result["username"]);
-                    window.location.href = "../index.html";
+                try {
+                    if (result["success"] == true) {
+                        sessionStorage.setItem("account_id", result["account_id"]);
+                        sessionStorage.setItem("first_name", result["first_name"]);
+                        sessionStorage.setItem("last_name", result["last_name"]);
+                        sessionStorage.setItem("username", result["username"]);
+                        window.location.href = "../index.html";
+                    }
+                    else {
+                        // we will try to log the user in if the account was nevertheless created
+                        const login_info = await get_post("http://" + HOSTNAME + ":5000/login", {
+                            "username": username,
+                            "password": password
+                        });
+
+                        if (login_info["success"] == true) {
+                            sessionStorage.setItem("account_id", result["account_id"]);
+                            sessionStorage.setItem("first_name", result["first_name"]);
+                            sessionStorage.setItem("last_name", result["last_name"]);
+                            sessionStorage.setItem("username", result["username"]);
+                            window.location.href = "../index.html";
+                        }
+                        // no else statement needed
+                    }
+                } catch {
+                    console.log("An error has occurred");
                 }
             }
         }
