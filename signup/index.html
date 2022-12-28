@@ -22,9 +22,15 @@
     <form id="signUpForm" method="post" class="sign-up">
         <h2>Sign Up</h2>
         <label for="f_name">First Name:</label><br>
-        <input id="f_name" type="text" name="f_name" required maxlength="35"><br>
+        <input id="f_name" type="text" name="f_name" onkeyup="nonEmptyFirstName()" maxlength="35">
+        <label id="noFirstName" style="color: red; display: none">
+            Please enter your first name <br>
+        </label> <br>
         <label for="l_name">Last Name:</label><br>
-        <input id="l_name" type="text" name="l_name" required maxlength="35"><br>
+        <input id="l_name" type="text" name="l_name" onkeyup="nonEmptyLastName()" maxlength="35">
+        <label id="noLastName" style="color: red; display: none">
+            Please enter your last name <br>
+        </label> <br>
         <label for="username">Username:</label><br>
         <input id="username" type="text" name="username" onkeyup="usernameValidate()" required minlength="4"
             maxlength="16">
@@ -75,6 +81,24 @@
             }
         }
 
+        function nonEmptyFirstName() {
+            if (document.getElementById("f_name").value.length == 0) {
+                document.getElementById("noFirstName").style.display = "block";
+            }
+            else {
+                document.getElementById("noFirstName").style.display = "none";
+            }
+        }
+
+        function nonEmptyLastName() {
+            if (document.getElementById("l_name").value.length == 0) {
+                document.getElementById("noLastName").style.display = "block";
+            }
+            else {
+                document.getElementById("noLarstName").style.display = "none";
+            }
+        }
+
         async function signup() {
             first_name = document.getElementById("f_name").value;
             last_name = document.getElementById("l_name").value;
@@ -83,9 +107,16 @@
 
             const unique = await get_post("http://" + HOSTNAME + ":5000/uniqueness", { "username": username });
 
-            // checks that username does not already exist
-            if (result["unique"] == false) {
-                document.getElementById("notUnique").style.display = "block";
+            if (first_name.length == 0 || last_name.length == 0 || result["unique"] == false) {
+                if (first_name.length == 0) { // checks that first name is not empty
+                    document.getElementById("noFirstName").style.display = "block";
+                }
+                if (last_name.length == 0) { // checks that last name is not empty
+                    document.getElementById("noLastName").style.display = "block";
+                }
+                if (result["unique"] == false) { // checks that username does not already exist
+                    document.getElementById("notUnique").style.display = "block";
+                }
             }
             else {
                 document.getElementById("notUnique").style.display = "none";
