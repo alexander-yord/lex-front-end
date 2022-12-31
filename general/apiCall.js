@@ -7,11 +7,14 @@ async function get_post (endpoint, data) {
         },
         body: JSON.stringify(data)
     })
-    console.log(response.status)
-    const creds = await response.json();
-    console.log(creds);
-    console.log(creds["first_name"])
-    return creds;
+    console.log(response.status);
+    if (response.status == 200) {
+        const res = await response.json();
+        return res;
+    }
+    else {
+        return {"success": false};
+    }
 }
 
 HOSTNAME = "79.100.219.84";
