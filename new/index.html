@@ -14,7 +14,7 @@
 <body>
     <div class="header">
         <div class="topnav" id="myHeader">
-            <a href="index.html" style="float: left;padding:0px; height: 100%"><img src="../images/logo.png"
+            <a href="../index.html" style="float: left;padding:0px; height: 100%"><img src="../images/logo.png"
                     style="height: 40px !important; margin: 0px; padding-top: 5px !important; padding-right: 0px; padding-bottom: 0px; padding-left: 0px;"></a>
             <a href="login" style="display: block" id="nav-login">Log In / Sign Up</a>
             <a href="" style="display: none;" id="nav-account">Account</a>
@@ -22,7 +22,7 @@
         </div>
     </div> <br>
 
-    <div id="not-logged" style="display: block;">You neeed to be logged in to access this page.</div>
+    <div id="not-logged" style="display: block;"><br>You neeed to be logged in to access this page.</div>
     <div id="logged-in" style="display: none;">
         <form method="post">
             <h2>Lex It Now!</h2> <br>
@@ -33,7 +33,7 @@
                 <option value="P" selected>Public</option>
                 <option value="R">Private</option>
             </select>
-            <input type="button" id="new-lex" style="float: right;" value="Lex It Now">
+            <input type="button" id="new-lex" style="float: right;" value="Lex It Now" onclick="new_lex()">
 
         </form>
     </div>
