@@ -1,166 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Log In</title>
-    <link rel="stylesheet" href="../general/theme.css">
-    <link rel="stylesheet" href="../general/headers.css">
-    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../general/theme.css" />
+    <link rel="stylesheet" href="../general/headers.css" />
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
     <meta name="theme-color" content="#76B947" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="../general/apiCall.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="header">
-        <div class="topnav" id="myHeader">
-            <a href="../index.html" style="float: left;padding:0px; height: 100%"><img src="../images/logo.png"
-                    style="height: 40px !important; margin: 0px; padding-top: 5px !important; padding-right: 0px; padding-bottom: 0px; padding-left: 0px;"></a>
-        </div>
-    </div> <br>
+      <div class="topnav" id="myHeader">
+        <a
+          id="logo"
+          href="../index.html"
+          style="float: left; padding: 0px; height: 100%"
+          ><img
+            src="../images/logo.png"
+            style="
+              height: 40px !important;
+              margin: 0px;
+              padding-top: 5px !important;
+              padding-right: 0px;
+              padding-bottom: 0px;
+              padding-left: 0px;
+            "
+        /></a>
+      </div>
+    </div>
+    <br />
 
     <form id="signUpForm" method="post" class="sign-up">
-        <h2>Sign Up</h2>
-        <label for="f_name">First Name:</label><br>
-        <input id="f_name" type="text" name="f_name" onkeyup="nonEmptyFirstName()" maxlength="35">
-        <label id="noFirstName" style="color: red; display: none">
-            Please enter your first name <br>
-        </label> <br>
-        <label for="l_name">Last Name:</label><br>
-        <input id="l_name" type="text" name="l_name" onkeyup="nonEmptyLastName()" maxlength="35">
-        <label id="noLastName" style="color: red; display: none">
-            Please enter your last name <br>
-        </label> <br>
-        <label for="username">Username:</label><br>
-        <input id="username" type="text" name="username" onkeyup="usernameValidate()" required minlength="4"
-            maxlength="16">
-        <label id="notUnique" style="color: red; display: none">
-            This username is taken! <br>
-        </label>
-        <label id="shortUsername" style="color: red; display: none">
-            Username must be at least 4 characters! <br>
-        </label> <br>
-        <label for="password">Password:</label><br>
-        <input id="password" type="password" name="password" onkeyup="passwordMinLength()" required minlength="4"
-            maxlength="16">
-        <label id="shortPassword" style="color: red; display: none">
-            Password must be at least 4 characters! <br>
-        </label><br>
-        <input type="button" id="signup-form" value="Sign Up" onclick="signup()"> <br>
-        <a href="../login">Already have an account? Log In</a>
+      <h2>Sign Up</h2>
+      <label for="f_name">First Name:</label><br />
+      <input
+        id="f_name"
+        type="text"
+        name="f_name"
+        onkeyup="nonEmptyFirstName()"
+        maxlength="35"
+      />
+      <label id="noFirstName" style="color: red; display: none">
+        Please enter your first name <br />
+      </label>
+      <br />
+      <label for="l_name">Last Name:</label><br />
+      <input
+        id="l_name"
+        type="text"
+        name="l_name"
+        onkeyup="nonEmptyLastName()"
+        maxlength="35"
+      />
+      <label id="noLastName" style="color: red; display: none">
+        Please enter your last name <br />
+      </label>
+      <br />
+      <label for="username">Username:</label><br />
+      <input
+        id="username"
+        type="text"
+        name="username"
+        onkeyup="usernameValidate()"
+        required
+        minlength="4"
+        maxlength="16"
+      />
+      <label id="notUnique" style="color: red; display: none">
+        This username is taken! <br />
+      </label>
+      <label id="shortUsername" style="color: red; display: none">
+        Username must be at least 4 characters! <br />
+      </label>
+      <br />
+      <label for="password">Password:</label><br />
+      <input
+        id="password"
+        type="password"
+        name="password"
+        onkeyup="passwordMinLength()"
+        required
+        minlength="4"
+        maxlength="16"
+      />
+      <label id="shortPassword" style="color: red; display: none">
+        Password must be at least 4 characters! <br /> </label
+      ><br />
+      <input
+        type="button"
+        id="signup-form"
+        value="Sign Up"
+        onclick="signup()"
+      />
+      <br />
+      <a href="../login">Already have an account? Log In</a>
     </form>
 
     <script>
-        async function usernameValidate() {
-            username = document.getElementById("username").value;
-            result = await get_post("http://" + HOSTNAME + ":5000/uniqueness", { "username": username });
+      async function usernameValidate() {
+        username = document.getElementById("username").value;
+        result = await get_post("http://" + HOSTNAME + ":5000/uniqueness", {
+          username: username,
+        });
 
-            // checks for the min length
-            if (username.length < 4) {
-                document.getElementById("shortUsername").style.display = "block";
-            }
-            else {
-                document.getElementById("shortUsername").style.display = "none";
-            }
+        // checks for the min length
+        if (username.length < 4) {
+          document.getElementById("shortUsername").style.display = "block";
+        } else {
+          document.getElementById("shortUsername").style.display = "none";
+        }
 
+        // checks that username does not already exist
+        if (result["unique"] == false) {
+          document.getElementById("notUnique").style.display = "block";
+        } else {
+          document.getElementById("notUnique").style.display = "none";
+        }
+      }
+
+      function passwordMinLength() {
+        if (document.getElementById("password").value.length < 4) {
+          document.getElementById("shortPassword").style.display = "block";
+        } else {
+          document.getElementById("shortPassword").style.display = "none";
+        }
+      }
+
+      function nonEmptyFirstName() {
+        if (document.getElementById("f_name").value.length == 0) {
+          document.getElementById("noFirstName").style.display = "block";
+        } else {
+          document.getElementById("noFirstName").style.display = "none";
+        }
+      }
+
+      function nonEmptyLastName() {
+        if (document.getElementById("l_name").value.length == 0) {
+          document.getElementById("noLastName").style.display = "block";
+        } else {
+          document.getElementById("noLastName").style.display = "none";
+        }
+      }
+
+      async function signup() {
+        first_name = document.getElementById("f_name").value;
+        last_name = document.getElementById("l_name").value;
+        username = document.getElementById("username").value;
+        password = document.getElementById("password").value;
+
+        const unique = await get_post(
+          "http://" + HOSTNAME + ":5000/uniqueness",
+          { username: username }
+        );
+
+        if (
+          first_name.length == 0 ||
+          last_name.length == 0 ||
+          result["unique"] == false
+        ) {
+          if (first_name.length == 0) {
+            // checks that first name is not empty
+            document.getElementById("noFirstName").style.display = "block";
+          }
+          if (last_name.length == 0) {
+            // checks that last name is not empty
+            document.getElementById("noLastName").style.display = "block";
+          }
+          if (result["unique"] == false) {
             // checks that username does not already exist
-            if (result["unique"] == false) {
-                document.getElementById("notUnique").style.display = "block";
-            }
-            else {
-                document.getElementById("notUnique").style.display = "none";
-            }
-        }
+            document.getElementById("notUnique").style.display = "block";
+          }
+        } else {
+          document.getElementById("notUnique").style.display = "none";
 
-        function passwordMinLength() {
-            if (document.getElementById("password").value.length < 4) {
-                document.getElementById("shortPassword").style.display = "block";
-            }
-            else {
-                document.getElementById("shortPassword").style.display = "none";
-            }
-        }
+          data = {
+            first_name: first_name,
+            last_name: last_name,
+            username: username,
+            password: password,
+          };
 
-        function nonEmptyFirstName() {
-            if (document.getElementById("f_name").value.length == 0) {
-                document.getElementById("noFirstName").style.display = "block";
-            }
-            else {
-                document.getElementById("noFirstName").style.display = "none";
-            }
-        }
+          const result = await get_post(
+            "http://" + HOSTNAME + ":5000/signup",
+            data
+          );
 
-        function nonEmptyLastName() {
-            if (document.getElementById("l_name").value.length == 0) {
-                document.getElementById("noLastName").style.display = "block";
-            }
-            else {
-                document.getElementById("noLastName").style.display = "none";
-            }
-        }
-
-        async function signup() {
-            first_name = document.getElementById("f_name").value;
-            last_name = document.getElementById("l_name").value;
-            username = document.getElementById("username").value;
-            password = document.getElementById("password").value;
-
-            const unique = await get_post("http://" + HOSTNAME + ":5000/uniqueness", { "username": username });
-
-            if (first_name.length == 0 || last_name.length == 0 || result["unique"] == false) {
-                if (first_name.length == 0) { // checks that first name is not empty
-                    document.getElementById("noFirstName").style.display = "block";
+          try {
+            if (result["success"] == true) {
+              sessionStorage.setItem("account_id", result["account_id"]);
+              sessionStorage.setItem("first_name", result["first_name"]);
+              sessionStorage.setItem("last_name", result["last_name"]);
+              sessionStorage.setItem("username", result["username"]);
+              window.location.href = "../index.html";
+            } else {
+              // we will try to log the user in if the account was nevertheless created
+              const login_info = await get_post(
+                "http://" + HOSTNAME + ":5000/login",
+                {
+                  username: username,
+                  password: password,
                 }
-                if (last_name.length == 0) { // checks that last name is not empty
-                    document.getElementById("noLastName").style.display = "block";
-                }
-                if (result["unique"] == false) { // checks that username does not already exist
-                    document.getElementById("notUnique").style.display = "block";
-                }
+              );
+
+              if (login_info["success"] == true) {
+                sessionStorage.setItem("account_id", result["account_id"]);
+                sessionStorage.setItem("first_name", result["first_name"]);
+                sessionStorage.setItem("last_name", result["last_name"]);
+                sessionStorage.setItem("username", result["username"]);
+                window.location.href = "../index.html";
+              }
+              // no else statement needed
             }
-            else {
-                document.getElementById("notUnique").style.display = "none";
-
-                data = {
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "username": username,
-                    "password": password
-                }
-
-                const result = await get_post("http://" + HOSTNAME + ":5000/signup", data);
-
-                try {
-                    if (result["success"] == true) {
-                        sessionStorage.setItem("account_id", result["account_id"]);
-                        sessionStorage.setItem("first_name", result["first_name"]);
-                        sessionStorage.setItem("last_name", result["last_name"]);
-                        sessionStorage.setItem("username", result["username"]);
-                        window.location.href = "../index.html";
-                    }
-                    else {
-                        // we will try to log the user in if the account was nevertheless created
-                        const login_info = await get_post("http://" + HOSTNAME + ":5000/login", {
-                            "username": username,
-                            "password": password
-                        });
-
-                        if (login_info["success"] == true) {
-                            sessionStorage.setItem("account_id", result["account_id"]);
-                            sessionStorage.setItem("first_name", result["first_name"]);
-                            sessionStorage.setItem("last_name", result["last_name"]);
-                            sessionStorage.setItem("username", result["username"]);
-                            window.location.href = "../index.html";
-                        }
-                        // no else statement needed
-                    }
-                } catch {
-                    console.log("An error has occurred");
-                }
-            }
+          } catch {
+            console.log("An error has occurred");
+          }
         }
+      }
     </script>
-
-</body>
-
+  </body>
 </html>

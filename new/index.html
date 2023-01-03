@@ -1,74 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <title>New Lex</title>
-    <link rel="stylesheet" href="../general/theme.css">
-    <link rel="stylesheet" href="../general/headers.css">
-    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../general/theme.css" />
+    <link rel="stylesheet" href="../general/headers.css" />
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
     <meta name="theme-color" content="#76B947" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="../general/apiCall.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="header">
-        <div class="topnav" id="myHeader">
-            <a href="../index.html" style="float: left;padding:0px; height: 100%"><img src="../images/logo.png"
-                    style="height: 40px !important; margin: 0px; padding-top: 5px !important; padding-right: 0px; padding-bottom: 0px; padding-left: 0px;"></a>
-            <a href="login" style="display: block" id="nav-login">Log In / Sign Up</a>
-            <a href="" style="display: none;" id="nav-account">Account</a>
-            <a href="new" style="display: none;" id="nav-lex">Lex Now!</a>
-        </div>
-    </div> <br>
+      <div class="topnav" id="myHeader">
+        <a
+          id="logo"
+          href="../index.html"
+          style="float: left; padding: 0px; height: 100%"
+          ><img
+            src="../images/logo.png"
+            style="
+              height: 40px !important;
+              margin: 0px;
+              padding-top: 5px !important;
+              padding-right: 0px;
+              padding-bottom: 0px;
+              padding-left: 0px;
+            "
+        /></a>
+        <a href="login" style="display: block" id="nav-login"
+          >Log In / Sign Up</a
+        >
+        <a href="" style="display: none" id="nav-account">Account</a>
+        <a href="new" style="display: none" id="nav-lex">Lex Now!</a>
+      </div>
+    </div>
+    <br />
 
-    <div id="not-logged" style="display: block;"><br>You neeed to be logged in to access this page.</div>
-    <div id="logged-in" style="display: none;">
-        <form method="post">
-            <h2>Lex It Now!</h2> <br>
-            <label for="content">Your Lex:</label> <br>
-            <textarea maxlength="16777215" id="content" name="content" style="width: 100%; box-sizing: border-box;"
-                required></textarea><br>
-            <select id="status" name="status" style="float: left; padding-left: 30px;">
-                <option value="P" selected>Public</option>
-                <option value="R">Private</option>
-            </select>
-            <input type="button" id="new-lex" style="float: right;" value="Lex It Now" onclick="new_lex()">
-
-        </form>
+    <div id="not-logged" style="display: block">
+      <br />You neeed to be logged in to access this page.
+    </div>
+    <div id="logged-in" style="display: none">
+      <form method="post">
+        <h2>Lex It Now!</h2>
+        <br />
+        <label for="content">Your Lex:</label> <br />
+        <textarea
+          maxlength="16777215"
+          id="content"
+          name="content"
+          style="width: 100%; box-sizing: border-box"
+          required
+        ></textarea
+        ><br />
+        <select
+          id="status"
+          name="status"
+          style="float: left; padding-left: 30px"
+        >
+          <option value="P" selected>Public</option>
+          <option value="R">Private</option>
+        </select>
+        <input
+          type="button"
+          id="new-lex"
+          style="float: right"
+          value="Lex It Now"
+          onclick="new_lex()"
+        />
+      </form>
     </div>
 
     <script>
-        if (sessionStorage.getItem("account_id") != null) {  // if logged in
-            // navigation bar 
-            document.getElementById("nav-login").style.display = "none";  // hides the signup/login button
-            document.getElementById("nav-account").style.display = "block";  // shows the account page button
-            document.getElementById("nav-lex").style.display = "block";  // shows the lex now button
-            // body
-            document.getElementById("not-logged").style.display = "none"; // hides the not logged in message
-            document.getElementById("logged-in").style.display = "block";  // shows the new lex form
-        }
+      if (sessionStorage.getItem("account_id") != null) {
+        // if logged in
+        // navigation bar
+        document.getElementById("nav-login").style.display = "none"; // hides the signup/login button
+        document.getElementById("nav-account").style.display = "block"; // shows the account page button
+        document.getElementById("nav-lex").style.display = "block"; // shows the lex now button
+        // body
+        document.getElementById("not-logged").style.display = "none"; // hides the not logged in message
+        document.getElementById("logged-in").style.display = "block"; // shows the new lex form
+      }
 
-        async function new_lex() {
-            content = document.getElementById("content").value;
-            status = document.getElementById("status").value;
-            account_id = sessionStorage.getItem("account_id");
+      async function new_lex() {
+        content = document.getElementById("content").value;
+        status = document.getElementById("status").value;
+        account_id = sessionStorage.getItem("account_id");
 
-            data = {
-                "account_id": account_id,
-                "content": content,
-                "status": status
-            }
-            res = await get_post("http://" + HOSTNAME + ":5000/new", data);
-            if (res["success"] == true) {
-                alert("Lex succesfully posted");
-                window.location.href = "../index.html";
-            }
+        data = {
+          account_id: account_id,
+          content: content,
+          status: status,
+        };
+        res = await get_post("http://" + HOSTNAME + ":5000/new", data);
+        if (res["success"] == true) {
+          alert("Lex succesfully posted");
+          window.location.href = "../index.html";
         }
+      }
     </script>
-
-
-</body>
-
-
+  </body>
 </html>
