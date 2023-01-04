@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>HOME</title>
     <link rel="stylesheet" href="general/theme.css" />
     <link rel="stylesheet" href="general/headers.css" />
@@ -8,60 +9,46 @@
     <meta name="theme-color" content="#76B947" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="general/apiCall.js"></script>
-  </head>
+</head>
 
-  <body>
+<body>
     <div class="header">
-      <div class="topnav" id="myHeader">
-        <a
-          id="logo"
-          href="index.html"
-          style="float: left; padding: 0px; height: 100%"
-          ><img
-            src="images/logo.png"
-            style="
-              height: 40px !important;
-              margin: 0px;
-              padding-top: 5px !important;
-              padding-right: 0px;
-              padding-bottom: 0px;
-              padding-left: 0px;
-            "
-        /></a>
-        <a href="login" style="display: block" id="nav-login"
-          >Log In / Sign Up</a
-        >
-        <a href="" style="display: none" id="nav-account">Account</a>
-        <a href="new" style="display: none" id="nav-lex">Lex Now!</a>
-      </div>
+        <div class="topnav" id="myHeader">
+            <a id="logo" href="../index.html" style="float: left; padding: 0px; height: 100%"><img src="../images/logo.png"
+                    style="height: 40px !important; margin: 0px; padding-top: 5px !important; padding-right: 0px; padding-bottom: 0px; padding-left: 0px;" /></a>
+            <a href="login" style="display: block" id="nav-login">Log In / Sign Up</a>
+            <a href="" style="display: none" id="nav-account">Account</a>
+            <a href="new" style="display: none" id="nav-lex">Lex Now!</a>
+        </div>
     </div>
     <br />
 
     <div id="welcome">
-      <h2>Welcome!</h2>
-      Lex It Now is a platform, which lets you share your thoughts on ongoing
-      events. <br />
-      <a href="login">Log in / Sign up</a> <br />
-      <!--Assumes that the user is not logged in. If they are, js will change it-->
+        <h2>Welcome!</h2>
+        Lex It Now is a platform, which lets you share your thoughts on ongoing
+        events. <br />
+        <a href="login">Log in / Sign up</a> <br />
+        <!--Assumes that the user is not logged in. If they are, js will change it-->
     </div>
 
     <script>
-      if (sessionStorage.getItem("account_id") != null) {
-        // if logged in
-        welcome_message =
-          "<h2>Welcome, " +
-          sessionStorage.getItem("first_name") +
-          "!</h2> <br> <button onclick='logout()'>Log out!</button>";
-        document.getElementById("welcome").innerHTML = welcome_message;
-        document.getElementById("nav-login").style.display = "none"; // hides the signup/login button
-        document.getElementById("nav-account").style.display = "block"; // shows the account page button
-        document.getElementById("nav-lex").style.display = "block"; // shows the lex now button
-      }
+        if (sessionStorage.getItem("account_id") != null) {
+            // if logged in
+            welcome_message =
+                "<h2>Welcome, " +
+                sessionStorage.getItem("first_name") +
+                "!</h2> <br> <button onclick='logout()'>Log out!</button>";
+            document.getElementById("welcome").innerHTML = welcome_message;
+            document.getElementById("nav-login").style.display = "none"; // hides the signup/login button
+            document.getElementById("nav-account").style.display = "block"; // shows the account page button
+            document.getElementById("nav-lex").style.display = "block"; // shows the lex now button
+        }
 
-      function logout() {
-        sessionStorage.clear();
-        window.location.reload();
-      }
+        function logout() {
+            sessionStorage.clear();
+            window.location.reload();
+        }
     </script>
-  </body>
+</body>
+
 </html>
