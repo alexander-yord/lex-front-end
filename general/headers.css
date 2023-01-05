@@ -1,43 +1,44 @@
 .header {
-  /* Container with fixed position */
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  background-color: #76b947;
+    /* Container with fixed position */
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: #76b947;
 }
 
 .topnav {
-  /* The actual header */
-  overflow: hidden;
-  width: 100%;
-  position: relative;
-  top: 0px;
-  left: 0px;
-  max-width: 800px;
-  margin: auto;
+    /* The actual header */
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    max-width: 800px;
+    margin: auto;
 }
 
 .topnav a {
-  /* Navbar buttons */
-  float: right;
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  border-radius: 10px 10px 0px 0px;
-  text-decoration: none;
+    /* Navbar buttons */
+    float: right;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 10px;
+    border-radius: 10px 10px 0px 0px;
+    text-decoration: none;
 }
 
 .topnav a:hover {
-  /* Links - change color on hover */
-  background-color: #94c973;
-  color: white;
+    /* Links - change color on hover */
+    background-color: #94c973;
+    color: white;
 }
 
 #logo {
-  border: none;
-  padding-left: 0px;
+    border: none;
+    padding: 0px;
+    margin-left: 0px;
 }
 
 /*
@@ -54,28 +55,29 @@ button:hover { /* buttons are a different shade of green
 */
 
 .footer {
-  display: block;
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
+    display: block;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
 }
 
 @media only screen and (max-width: 1000px) {
-  /* footer hides if screen size is less than 1000px */
-  .footer {
-    display: none;
-  }
+
+    /* footer hides if screen size is less than 1000px */
+    .footer {
+        display: none;
+    }
 }
 
-@media screen and (max-width: 800px) {
-  #logo {
-    padding-left: 10px !important;
-  }
+@media screen and (max-width: 805px) { /* 800 +5 for screen that are in between */
+    #logo {
+        margin-left: 10px !important;
+    }
 }
 
 .lex {
-  border: 2px solid;
-  border-color: #76b947;
-  border-radius: 10px;
-  padding: 10px;
+    border: 2px solid;
+    border-color: #76b947;
+    border-radius: 10px;
+    padding: 10px;
 }
