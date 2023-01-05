@@ -41,7 +41,7 @@
             welcome_message =
                 "<h2>Welcome, " +
                 sessionStorage.getItem("first_name") +
-                "!</h2> <br> <button onclick='logout()'>Log out!</button>";
+                "!</h2> <br> <button onclick='logout()'>Log out!</button> <br>";
             document.getElementById("welcome").innerHTML = welcome_message;
             document.getElementById("nav-login").style.display = "none"; // hides the signup/login button
             document.getElementById("nav-account").style.display = "block"; // shows the account page button
