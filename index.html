@@ -31,17 +31,23 @@
         <!--Assumes that the user is not logged in. If they are, js will change it-->
     </div>
 
+    <div id="lexes-list" style="display: none;">
+
+    </div>
+
     <script>
         if (sessionStorage.getItem("account_id") != null) {
             // if logged in
             welcome_message =
                 "<h2>Welcome, " +
                 sessionStorage.getItem("first_name") +
-                "!</h2> <br> <button onclick='logout()'>Log out!</button>";
+                "!</h2> <button onclick='logout()'>Log out!</button> <br><br>";
             document.getElementById("welcome").innerHTML = welcome_message;
             document.getElementById("nav-login").style.display = "none"; // hides the signup/login button
             document.getElementById("nav-account").style.display = "block"; // shows the account page button
             document.getElementById("nav-lex").style.display = "block"; // shows the lex now button
+            document.getElementById("lexes-list").style.display = "block"; // displays the lexes
+            add_lex_bulk(0, document.getElementById("lexes-list"));
         }
 
         function logout() {
