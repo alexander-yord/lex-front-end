@@ -22,7 +22,7 @@ function create_lex(number, data) {
     card.className = "lex";
     card.id = "lex-"+number.toString();
     content = "<normalsize float='left'><b>"+data["first_name"]+ " " + data["last_name"]+"</b></normalsize>";
-    content += "&nbsp &nbsp <a style='font-size: 16px;'>@"+data["username"]+"</a>";
+    content += "&nbsp &nbsp <a style='font-size: 16px;' href='account.html?id="+data["account_id"]+"'>@"+data["username"]+"</a>";
     content += "<a style='float: right; display: none;'  onclick='copyUrl()'> Share</a> <br>";
     content += "<p>"+data["content"]+"</p>";
     content += "<normalsize style='float: right'>Published: "+data["publish_dt"] +" </normalsize><br>";

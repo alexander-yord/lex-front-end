@@ -64,7 +64,8 @@
                 "account_id": urlParams.get("id"),
                 "current_id": sessionStorage.getItem("account_id")
             });
-            console.log(response);
+            // console.log(response);
+            document.title = response["account_info"]["first_name"] + " " + response["account_info"]["last_name"];
             if (response["success"] == true) {
                 document.getElementById("name").innerHTML = response["account_info"]["first_name"] + " " + response["account_info"]["last_name"];
                 document.getElementById("username").innerHTML = "@" + response["account_info"]["username"];
@@ -94,7 +95,7 @@
                         row = document.createElement("tr");
                         following_string = (response["followers"][i]["current_following"]) ? "Following" : "Not folowing";
                         row.innerHTML = "<td>" + response["followers"][i]["first_name"] + " " +
-                            response["followers"][i]["last_name"] + "</td><td><a>@" + response["followers"][i]["username"] + "</a></td><td><i>" + following_string + "</i></td>";
+                            response["followers"][i]["last_name"] + "</td><td><a href='account.html?id=" + response["followers"][i]["account_id"] + "'>@" + response["followers"][i]["username"] + "</a></td><td><i>" + following_string + "</i></td>";
                         document.getElementById("followers-list").appendChild(row);
                     }
                 }
@@ -109,7 +110,7 @@
                         row = document.createElement("tr");
                         following_string = (response["following"][i]["current_following"]) ? "Following" : "Not folowing";
                         row.innerHTML = "<td>" + response["following"][i]["first_name"] + " " +
-                            response["following"][i]["last_name"] + "</td><td><a>@" + response["following"][i]["username"] + "</a></td><td><i>" + following_string + "</i></td>";
+                            response["following"][i]["last_name"] + "</td><td><a href='account.html?id=" + response["following"][i]["account_id"] + "'>@" + response["following"][i]["username"] + "</a></td><td><i>" + following_string + "</i></td>";
                         document.getElementById("following-list").appendChild(row);
                     }
                 }
