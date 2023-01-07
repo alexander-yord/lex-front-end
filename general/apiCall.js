@@ -20,7 +20,7 @@ async function get_post (endpoint, data) {
 function create_lex(number, data) {
     const card = document.createElement("div");
     card.className = "lex";
-    card.id = "lex-"+toString(number);
+    card.id = "lex-"+number.toString();
     content = "<normalsize float='left'><b>"+data["first_name"]+ " " + data["last_name"]+"</b></normalsize>";
     content += "&nbsp &nbsp <a style='font-size: 16px;'>@"+data["username"]+"</a>";
     content += "<a style='float: right; display: none;'  onclick='copyUrl()'> Share</a> <br>";
@@ -41,10 +41,13 @@ async function add_lex_bulk(index, container) {
     }
 }
 
-HOSTNAME = "79.100.219.84";
+HOSTNAME = "192.168.1.17";
 try {
     if (window.location.hostname == "192.168.1.17") {
         HOSTNAME = "192.168.1.17";
+    }
+    if (window.location.hostname == "79.100.219.84") {
+        HOSTNAME = "79.100.219.84";
     }
 } 
 catch {
