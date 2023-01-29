@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Account</title>
+    <link rel="stylesheet" href="general/theme.css" />
+    <link rel="stylesheet" href="general/headers.css" />
+    <link rel="stylesheet" href="general/account-style.css" />
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+    <meta name="theme-color" content="#76B947" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="general/apiCall.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="topnav" id="myHeader">
+            <a id="logo" href="../index.html" style="float: left; padding: 0px; height: 100%"><img src="images/logo.png"
+                    style="height: 40px !important; margin: 0px; padding-top: 5px !important; padding-right: 0px; padding-bottom: 0px; padding-left: 0px;" /></a>
+            <a href="login" style="display: block" id="nav-login">Log In / Sign Up</a>
+            <a href="" style="display: none" id="nav-account">Account</a>
+            <a href="new" style="display: none" id="nav-lex">Lex Now!</a>
+        </div>
+    </div> <br><br>
+
+    <div id="not-logged">
+        <h2>You need to be logged in to access this page!</h2>
+        <a href="login">Log in / Sign up</a> <br />
+        <!--Assumes that the user is not logged in. If they are, js will change it-->
+    </div>
+
+    <div id="page-contents" style="display: none;">
+        <h2 id="name"></h2>
+        <a id="username"></a>
+        <input type="button" value="Follow!" id="follow-unfollow" style="float: right;" onclick="follow_unfollow()" />
+        <br><br><br>
+
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'lexes')" id="defaultOpen">Recent Lexes</button>
+            <button class="tablinks" onclick="openTab(event, 'followers')">Followers</button>
+            <button class="tablinks" onclick="openTab(event, 'following')">Following</button>
+        </div>
+
+        <div id="lexes" class="tabcontent"></div>
+        <div id="followers" class="tabcontent"></div>
+        <div id="following" class="tabcontent"></div>
+    </div>
+
+    <script>
+        if (sessionStorage.getItem("account_id") != null) { // if logged in
+            document.getElementById("nav-login").style.display = "none"; // hides the signup/login button
+            document.getElementById("nav-account").style.display = "block"; // shows the account page button
+            document.getElementById("nav-lex").style.display = "block"; // shows the lex now button
+            document.getElementById("not-logged").style.display = "none"; // hides the not logged in message 
+            info_loader();
+        }
+
+        async function info_loader() {
+            document.getElementById("lexes").style.display = "block";
+            document.getElementById("defaultOpen").className += " active";
+            const urlParams = new URLSearchParams(window.location.search);
+            response = await get_post("http://" + HOSTNAME + ":5000/account_info", {
+                "account_id": urlParams.get("id"),
+                "current_id": sessionStorage.getItem("account_id")
+            });
+            // console.log(response);
+            document.title = response["account_info"]["first_name"] + " " + response["account_info"]["last_name"];
+            if (response["success"] == true) {
+                document.getElementById("name").innerHTML = response["account_info"]["first_name"] + " " + response["account_info"]["last_name"];
+                document.getElementById("username").innerHTML = "@" + response["account_info"]["username"];
+                if (response["account_info"]["following"]) {
+                    btn = document.getElementById("follow-unfollow");
+                    btn.value = "Unfollow"; // changes the text to be following 
+                    btn.style.backgroundColor = "#d0cfcf";
+                    btn.style.color = "#000";
+                }
+
+                // lexes
+                if (response["lexes"].length == 0) { // checks if the person has lexed
+                    document.getElementById("lexes").innerHTML = "<h3>" + response["account_info"]["first_name"] + " has not lexed yet&#x1F61E </h3>";
+                } else {
+                    for (i = 0; i < response["lexes"].length; i++) {
+                        document.getElementById("lexes").appendChild(create_lex(response["lexes"][i]["uid"], response["lexes"][i]));
+                    }
+                }
+
+                // followers 
+                if (response["followers"].length == 0) { // checks if the person is followed by anybody
+                    document.getElementById("followers").innerHTML = "<h3>" + response["account_info"]["first_name"] + " has no followers yet&#x1F61E </h3>";
+                } else {
+                    document.getElementById("followers").innerHTML = "<h3>Accounts that follow " + response["account_info"]["first_name"] + ": </h3>";
+                    document.getElementById("followers").innerHTML += "<table id='followers-list'></table>";
+                    for (i = 0; i < response["followers"].length; i++) {
+                        row = document.createElement("tr");
+                        following_string = (response["followers"][i]["current_following"]) ? "Following" : "Not folowing";
+                        row.innerHTML = "<td>" + response["followers"][i]["first_name"] + " " +
+                            response["followers"][i]["last_name"] + "</td><td><a href='account.html?id=" + response["followers"][i]["account_id"] + "'>@" + response["followers"][i]["username"] + "</a></td><td><i>" + following_string + "</i></td>";
+                        document.getElementById("followers-list").appendChild(row);
+                    }
+                }
+
+                // following
+                if (response["following"].length == 0) { // checks if the person is following anybody
+                    document.getElementById("following").innerHTML = "<h3>" + response["account_info"]["first_name"] + " is not following anyone yet&#x1F61E </h3>";
+                } else {
+                    document.getElementById("following").innerHTML = "<h3>Accounts that " + response["account_info"]["first_name"] + " is following: </h3>";
+                    document.getElementById("following").innerHTML += "<table id='following-list'></table>";
+                    for (i = 0; i < response["following"].length; i++) {
+                        row = document.createElement("tr");
+                        following_string = (response["following"][i]["current_following"]) ? "Following" : "Not folowing";
+                        row.innerHTML = "<td>" + response["following"][i]["first_name"] + " " +
+                            response["following"][i]["last_name"] + "</td><td><a href='account.html?id=" + response["following"][i]["account_id"] + "'>@" + response["following"][i]["username"] + "</a></td><td><i>" + following_string + "</i></td>";
+                        document.getElementById("following-list").appendChild(row);
+                    }
+                }
+            }
+            document.getElementById("page-contents").style.display = "block"; // shows the page contents
+        }
+
+
+        function openTab(evt, tabName) { // open tabs
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        };
+
+        async function follow_unfollow() {
+            //changes follow and unfollow button 
+            const btn = document.getElementById("follow-unfollow");
+            const urlParams = new URLSearchParams(window.location.search);
+
+            if (btn.value === "Follow!") { // if not following 
+                response = await get_post("http://" + HOSTNAME + ":5000/new_follower", {
+                    "account_id": sessionStorage.getItem("account_id"), // current user's id
+                    "followed_account_id": urlParams.get("id"), // the id of the user to be followed
+                    "action": "A"
+                });
+                if (response["success"]) {
+                    btn.value = "Unfollow"; // changes the text to be following 
+                    btn.style.backgroundColor = "#d0cfcf";
+                    btn.style.color = "#000";
+                }
+            } else {
+                if (confirm('Are you sure you want to unfollow this account?')) {
+                    response = await await get_post("http://" + HOSTNAME + ":5000/new_follower", {
+                        "account_id": sessionStorage.getItem("account_id"), // current user's id
+                        "followed_account_id": urlParams.get("id"), // the id of the user to be followed
+                        "action": "D"
+                    });
+                    if (response["success"]) {
+                        btn.value = "Follow!";
+                        btn.style.backgroundColor = "#76B947";
+                        btn.style.color = "white";
+                    }
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>
