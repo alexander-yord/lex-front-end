@@ -43,12 +43,7 @@ async function add_lex_bulk(index, container) {
 
 HOSTNAME = "192.168.1.17";
 try {
-    if (window.location.hostname == "192.168.1.17") {
-        HOSTNAME = "192.168.1.17";
-    }
-    if (window.location.hostname == "79.100.219.84") {
-        HOSTNAME = "79.100.219.84";
-    }
+    HOSTNAME = location.hostname;
 } 
 catch {
     console.log("You are probably running this as a local file");
